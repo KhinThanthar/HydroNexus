@@ -1,0 +1,173 @@
+import type { MetricConfig, MetricStatus, SensorKey, SensorReading } from '../types'
+
+/** Definitions for the four headline sensors shown across the dashboard. */
+export const METRICS: MetricConfig[] = [
+  {
+    key: 'ph',
+    label: 'pH',
+    shortLabel: 'pH',
+    unit: '',
+    color: '#1555f5',
+    soft: '#eaf0ff',
+    normalMin: 5.5,
+    normalMax: 6.5,
+    decimals: 1,
+  },
+  {
+    key: 'ec',
+    label: 'EC (PPM)',
+    shortLabel: 'EC',
+    unit: 'ppm',
+    color: '#168544',
+    soft: '#e7f5ec',
+    normalMin: 700,
+    normalMax: 1000,
+    decimals: 0,
+  },
+  {
+    key: 'temperature',
+    label: 'Temperature',
+    shortLabel: 'Temp',
+    unit: '°C',
+    color: '#f59e0b',
+    soft: '#fdf1de',
+    normalMin: 20,
+    normalMax: 28,
+    decimals: 1,
+  },
+  {
+    key: 'dissolvedOxygen',
+    label: 'Dissolved Oxygen',
+    shortLabel: 'DO',
+    unit: 'mg/L',
+    color: '#8b5cf6',
+    soft: '#f2edfe',
+    normalMin: 5,
+    normalMax: 10,
+    decimals: 1,
+  },
+]
+
+export const METRIC_BY_KEY: Record<SensorKey, MetricConfig> = METRICS.reduce(
+  (acc, metric) => {
+    acc[metric.key] = metric
+    return acc
+  },
+  {} as Record<SensorKey, MetricConfig>,
+)
+
+/** Extra readings shown on the Monitoring page. */
+export const EXTRA_METRICS = [
+  { key: 'humidity', label: 'Air Humidity', value: 68, unit: '%', min: 55, max: 75 },
+  { key: 'waterLevel', label: 'Water Level', value: 74, unit: '%', min: 40, max: 100 },
+  { key: 'light', label: 'Light Intensity', value: 820, unit: 'µmol', min: 600, max: 1000 },
+  { key: 'waterTemp', label: 'Water Temp', value: 21.4, unit: '°C', min: 18, max: 24 },
+] as const
+
+/** Current (live) readings per greenhouse — the values shown on the metric cards. */
+export const CURRENT_READINGS: Record<string, Record<SensorKey, number>> = {
+  'gh-samata': { ph: 5.8, ec: 820, temperature: 26.7, dissolvedOxygen: 6.3 },
+  'gh-riverside': { ph: 6.2, ec: 910, temperature: 23.4, dissolvedOxygen: 5.4 },
+  'gh-hilltop': { ph: 5.4, ec: 760, temperature: 28.9, dissolvedOxygen: 7.1 },
+}
+
+/** 24 hourly readings per greenhouse. Values wobble realistically inside believable ranges. */
+export const TREND_24H: Record<string, SensorReading[]> = {
+  'gh-samata': [
+    { time: '00:00', ph: 6.1, ec: 880, temperature: 23.1, dissolvedOxygen: 6.8 },
+    { time: '01:00', ph: 6.1, ec: 875, temperature: 22.8, dissolvedOxygen: 6.9 },
+    { time: '02:00', ph: 6.0, ec: 872, temperature: 22.5, dissolvedOxygen: 7.0 },
+    { time: '03:00', ph: 6.0, ec: 870, temperature: 22.3, dissolvedOxygen: 7.0 },
+    { time: '04:00', ph: 6.0, ec: 868, temperature: 22.2, dissolvedOxygen: 6.9 },
+    { time: '05:00', ph: 5.9, ec: 865, temperature: 22.4, dissolvedOxygen: 6.8 },
+    { time: '06:00', ph: 5.9, ec: 860, temperature: 23.0, dissolvedOxygen: 6.7 },
+    { time: '07:00', ph: 5.9, ec: 855, temperature: 23.8, dissolvedOxygen: 6.5 },
+    { time: '08:00', ph: 5.8, ec: 848, temperature: 24.6, dissolvedOxygen: 6.3 },
+    { time: '09:00', ph: 5.8, ec: 842, temperature: 25.3, dissolvedOxygen: 6.1 },
+    { time: '10:00', ph: 5.8, ec: 836, temperature: 26.0, dissolvedOxygen: 5.9 },
+    { time: '11:00', ph: 5.8, ec: 830, temperature: 26.7, dissolvedOxygen: 5.7 },
+    { time: '12:00', ph: 5.7, ec: 826, temperature: 27.4, dissolvedOxygen: 5.5 },
+    { time: '13:00', ph: 5.7, ec: 822, temperature: 27.8, dissolvedOxygen: 5.4 },
+    { time: '14:00', ph: 5.7, ec: 818, temperature: 28.0, dissolvedOxygen: 5.3 },
+    { time: '15:00', ph: 5.7, ec: 815, temperature: 27.6, dissolvedOxygen: 5.5 },
+    { time: '16:00', ph: 5.8, ec: 814, temperature: 27.0, dissolvedOxygen: 5.8 },
+    { time: '17:00', ph: 5.8, ec: 816, temperature: 26.2, dissolvedOxygen: 6.0 },
+    { time: '18:00', ph: 5.8, ec: 820, temperature: 25.4, dissolvedOxygen: 6.2 },
+    { time: '19:00', ph: 5.8, ec: 824, temperature: 24.7, dissolvedOxygen: 6.4 },
+    { time: '20:00', ph: 5.9, ec: 830, temperature: 24.1, dissolvedOxygen: 6.6 },
+    { time: '21:00', ph: 5.9, ec: 838, temperature: 23.6, dissolvedOxygen: 6.7 },
+    { time: '22:00', ph: 5.9, ec: 846, temperature: 23.2, dissolvedOxygen: 6.8 },
+    { time: '23:00', ph: 5.8, ec: 855, temperature: 22.9, dissolvedOxygen: 6.9 },
+  ],
+  'gh-riverside': [
+    { time: '00:00', ph: 6.4, ec: 950, temperature: 20.2, dissolvedOxygen: 6.0 },
+    { time: '01:00', ph: 6.4, ec: 948, temperature: 19.9, dissolvedOxygen: 6.1 },
+    { time: '02:00', ph: 6.3, ec: 945, temperature: 19.6, dissolvedOxygen: 6.2 },
+    { time: '03:00', ph: 6.3, ec: 942, temperature: 19.4, dissolvedOxygen: 6.2 },
+    { time: '04:00', ph: 6.3, ec: 940, temperature: 19.3, dissolvedOxygen: 6.1 },
+    { time: '05:00', ph: 6.3, ec: 936, temperature: 19.5, dissolvedOxygen: 6.0 },
+    { time: '06:00', ph: 6.3, ec: 932, temperature: 20.1, dissolvedOxygen: 5.9 },
+    { time: '07:00', ph: 6.3, ec: 928, temperature: 20.8, dissolvedOxygen: 5.8 },
+    { time: '08:00', ph: 6.2, ec: 924, temperature: 21.5, dissolvedOxygen: 5.7 },
+    { time: '09:00', ph: 6.2, ec: 920, temperature: 22.1, dissolvedOxygen: 5.6 },
+    { time: '10:00', ph: 6.2, ec: 916, temperature: 22.8, dissolvedOxygen: 5.5 },
+    { time: '11:00', ph: 6.2, ec: 912, temperature: 23.4, dissolvedOxygen: 5.4 },
+    { time: '12:00', ph: 6.2, ec: 910, temperature: 23.9, dissolvedOxygen: 5.3 },
+    { time: '13:00', ph: 6.1, ec: 906, temperature: 24.2, dissolvedOxygen: 5.2 },
+    { time: '14:00', ph: 6.1, ec: 902, temperature: 24.4, dissolvedOxygen: 5.2 },
+    { time: '15:00', ph: 6.1, ec: 900, temperature: 24.1, dissolvedOxygen: 5.3 },
+    { time: '16:00', ph: 6.1, ec: 902, temperature: 23.6, dissolvedOxygen: 5.5 },
+    { time: '17:00', ph: 6.2, ec: 906, temperature: 23.0, dissolvedOxygen: 5.6 },
+    { time: '18:00', ph: 6.2, ec: 910, temperature: 22.4, dissolvedOxygen: 5.8 },
+    { time: '19:00', ph: 6.2, ec: 916, temperature: 21.8, dissolvedOxygen: 5.9 },
+    { time: '20:00', ph: 6.3, ec: 922, temperature: 21.3, dissolvedOxygen: 6.0 },
+    { time: '21:00', ph: 6.3, ec: 930, temperature: 20.9, dissolvedOxygen: 6.1 },
+    { time: '22:00', ph: 6.3, ec: 938, temperature: 20.6, dissolvedOxygen: 6.2 },
+    { time: '23:00', ph: 6.4, ec: 946, temperature: 20.4, dissolvedOxygen: 6.2 },
+  ],
+  'gh-hilltop': [
+    { time: '00:00', ph: 5.6, ec: 810, temperature: 25.0, dissolvedOxygen: 7.6 },
+    { time: '01:00', ph: 5.6, ec: 806, temperature: 24.6, dissolvedOxygen: 7.7 },
+    { time: '02:00', ph: 5.6, ec: 802, temperature: 24.3, dissolvedOxygen: 7.8 },
+    { time: '03:00', ph: 5.5, ec: 800, temperature: 24.0, dissolvedOxygen: 7.8 },
+    { time: '04:00', ph: 5.5, ec: 798, temperature: 23.9, dissolvedOxygen: 7.7 },
+    { time: '05:00', ph: 5.5, ec: 794, temperature: 24.1, dissolvedOxygen: 7.6 },
+    { time: '06:00', ph: 5.5, ec: 790, temperature: 24.8, dissolvedOxygen: 7.5 },
+    { time: '07:00', ph: 5.5, ec: 786, temperature: 25.7, dissolvedOxygen: 7.3 },
+    { time: '08:00', ph: 5.4, ec: 782, temperature: 26.6, dissolvedOxygen: 7.1 },
+    { time: '09:00', ph: 5.4, ec: 776, temperature: 27.4, dissolvedOxygen: 6.9 },
+    { time: '10:00', ph: 5.4, ec: 772, temperature: 28.1, dissolvedOxygen: 6.7 },
+    { time: '11:00', ph: 5.4, ec: 768, temperature: 28.6, dissolvedOxygen: 6.5 },
+    { time: '12:00', ph: 5.4, ec: 764, temperature: 28.9, dissolvedOxygen: 6.4 },
+    { time: '13:00', ph: 5.3, ec: 760, temperature: 29.1, dissolvedOxygen: 6.3 },
+    { time: '14:00', ph: 5.3, ec: 758, temperature: 29.2, dissolvedOxygen: 6.3 },
+    { time: '15:00', ph: 5.3, ec: 756, temperature: 28.8, dissolvedOxygen: 6.5 },
+    { time: '16:00', ph: 5.4, ec: 758, temperature: 28.2, dissolvedOxygen: 6.7 },
+    { time: '17:00', ph: 5.4, ec: 762, temperature: 27.5, dissolvedOxygen: 6.9 },
+    { time: '18:00', ph: 5.4, ec: 768, temperature: 26.7, dissolvedOxygen: 7.1 },
+    { time: '19:00', ph: 5.5, ec: 774, temperature: 26.0, dissolvedOxygen: 7.3 },
+    { time: '20:00', ph: 5.5, ec: 782, temperature: 25.4, dissolvedOxygen: 7.4 },
+    { time: '21:00', ph: 5.5, ec: 790, temperature: 24.9, dissolvedOxygen: 7.5 },
+    { time: '22:00', ph: 5.5, ec: 798, temperature: 24.5, dissolvedOxygen: 7.6 },
+    { time: '23:00', ph: 5.6, ec: 806, temperature: 24.2, dissolvedOxygen: 7.6 },
+  ],
+}
+
+/** Device registry used by the Monitoring page. */
+export const DEVICES = [
+  { id: 'dev-ph-01', name: 'pH Probe A1', type: 'pH sensor', status: 'online' as const, battery: 92, lastSync: '1 min ago' },
+  { id: 'dev-ec-01', name: 'EC Sensor B2', type: 'EC sensor', status: 'online' as const, battery: 87, lastSync: '2 min ago' },
+  { id: 'dev-tp-01', name: 'Climate Probe C3', type: 'Temperature', status: 'online' as const, battery: 74, lastSync: '1 min ago' },
+  { id: 'dev-do-01', name: 'DO Probe D4', type: 'Dissolved oxygen', status: 'online' as const, battery: 81, lastSync: '3 min ago' },
+]
+
+/** Classify a reading against its healthy range. */
+export function evaluateStatus(key: SensorKey, value: number): MetricStatus {
+  const metric = METRIC_BY_KEY[key]
+  const span = metric.normalMax - metric.normalMin
+  const low = metric.normalMin - span * 0.25
+  const high = metric.normalMax + span * 0.25
+  if (value < low || value > high) return 'critical'
+  if (value < metric.normalMin || value > metric.normalMax) return 'warning'
+  return 'normal'
+}
